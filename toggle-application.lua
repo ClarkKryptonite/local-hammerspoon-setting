@@ -32,7 +32,7 @@ local key2App = {
     p = "com.jetbrains.pycharm", -- p for PyCharm
     q = "com.tencent.qq", -- q for QQ
     -- r = 'com.apple.reminders',
-    -- s = 'com.apple.systempreferences',
+    s = 'com.spotify.client', -- s for spotify.If is ok for six months, it should replace 'm' key.
     t = "com.tdesktop.Telegram", -- t for Telegram
     -- u∫
     v = 'com.colliderli.iina', -- v for VideoPlayer

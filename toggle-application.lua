@@ -13,6 +13,7 @@ local key2App = {
     ["4"] = "com.apple.Dictionary",
     ["5"] = "com.apple.Notes",
     ["6"] = "com.apple.finder",
+    ["7"] = "com.apple.Preview",
     ["9"] = "com.apple.reminders",
     a = "com.google.android.studio",
     b = "com.google.Chrome", -- b for Browser

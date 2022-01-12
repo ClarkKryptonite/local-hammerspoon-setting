@@ -9,6 +9,7 @@ local hyper = {"alt"}
 local key2App = {
     ["0"] = "com.apple.systempreferences",
     ["1"] = "com.apple.ActivityMonitor",
+    ["2"] = "com.apple.iBooksX",
     ["3"] = "com.apple.calculator",
     ["4"] = "com.apple.Dictionary",
     ["5"] = "com.apple.Notes",

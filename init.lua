@@ -15,7 +15,6 @@ require "network-binding"
 
 require "toggle-application"
 require "windows"
-require "markdown"
 
 -- -----------------------------------------------------------------------
 --                            ** For Debug **                           --

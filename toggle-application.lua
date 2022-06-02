@@ -56,6 +56,7 @@ end
 function toggle_application(_appBundleId)
 	-- finds a running applications
 	local app = application.get(_appBundleId)
+	print("---toggle application:" .. _appBundleId)
 	if not app then
 		-- application not running, launch app
 		-- alert.show("not appBundleId : ".._appBundleId)
@@ -66,13 +67,16 @@ function toggle_application(_appBundleId)
 	local mainwin = app:mainWindow()
 	-- confirm app name, usually application name is in left-top corner besides apple icon.
 	-- alert.show("pid:"..tostring(app:pid()).."-bundleId:"..tostring(app:bundleID()).."-name:"..app:name())
+	print("main null?" .. tostring(mainwin == nil))
 	if mainwin then
-		if true == app:isFrontmost() then
+		local isAppFront = app:isFrontmost()
+		print("isAppFront:" .. tostring(isAppFront))
+		if true == isAppFront then
 			app:hide()
 		else
-			mainwin:application():unhide()
-			mainwin:application():activate(true)
-			mainwin:focus()
+			print("unhide success?:" .. tostring(mainwin:application():unhide()))
+			print("activate success?:" .. tostring(mainwin:application():activate(true)))
+			print("focus window not nil?:" .. tostring(mainwin:focus() ~= nil))
 		end
 	else
 		-- no windows, maybe hide

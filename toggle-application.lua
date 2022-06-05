@@ -88,6 +88,7 @@ function toggle_application(_appBundleId)
 		--     -- do nothing
 		--     alert.show("do nothing")
 		-- end
-		application.launchOrFocusByBundleID(_appBundleId)
+		local result = application.launchOrFocusByBundleID(_appBundleId)
+		print("mainwin null launch result:" .. tostring(result))
 	end
 end

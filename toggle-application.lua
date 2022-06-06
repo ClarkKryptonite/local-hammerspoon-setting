@@ -77,8 +77,8 @@ function toggle_application(_appBundleId)
 		if true == isAppFront then
 			app:hide()
 		else
-			mainwin:application():unhide()
-			mainwin:application():activate(true)
+			app:unhide()
+			app:activate(true)
 			mainwin:focus()
 		end
 	else

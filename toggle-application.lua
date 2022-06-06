@@ -82,6 +82,8 @@ function toggle_application(_appBundleId)
 			mainwin:focus()
 		end
 	else
+		-- ctrl-w close app
+		print("mainWindow is Null -> launch:" .. tostring(application.launchOrFocusByBundleID(_appBundleId)))
 		print("mainWindow is Null -> unhide:" .. tostring(app:unhide()))
 		print("mainWindow is Null -> activate:" .. tostring(app:activate(true)))
 	end

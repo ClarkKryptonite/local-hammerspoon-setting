@@ -2,6 +2,9 @@ local application = require("hs.application")
 local hotkey = require("hs.hotkey")
 local alert = require("hs.alert")
 
+-- disable spotlight for name search
+application.enableSpotlightForNameSearches(false)
+
 -- hyper
 local hyper = { "alt" }
 
@@ -67,28 +70,19 @@ function toggle_application(_appBundleId)
 	local mainwin = app:mainWindow()
 	-- confirm app name, usually application name is in left-top corner besides apple icon.
 	-- alert.show("pid:"..tostring(app:pid()).."-bundleId:"..tostring(app:bundleID()).."-name:"..app:name())
-	print("main null?" .. tostring(mainwin == nil))
+	print("mainWindow is null?" .. tostring(mainwin == nil))
 	if mainwin then
 		local isAppFront = app:isFrontmost()
 		print("isAppFront:" .. tostring(isAppFront))
 		if true == isAppFront then
 			app:hide()
 		else
-			print("unhide success?:" .. tostring(mainwin:application():unhide()))
-			print("activate success?:" .. tostring(mainwin:application():activate(true)))
-			print("focus window not nil?:" .. tostring(mainwin:focus() ~= nil))
+			mainwin:application():unhide()
+			mainwin:application():activate(true)
+			mainwin:focus()
 		end
 	else
-		-- no windows, maybe hide
-		-- don't use isHidden(), if u hide app with cmd+w, isHidden() is false
-		-- if true == app:hide() then
-		--     -- focus app
-		--     application.launchOrFocusByBundleID(_appBundleId)
-		-- else
-		--     -- do nothing
-		--     alert.show("do nothing")
-		-- end
-		local result = application.launchOrFocusByBundleID(_appBundleId)
-		print("mainwin null launch result:" .. tostring(result))
+		print("mainWindow is Null -> unhide:" .. tostring(app:unhide()))
+		print("mainWindow is Null -> activate:" .. tostring(app:activate(true)))
 	end
 end

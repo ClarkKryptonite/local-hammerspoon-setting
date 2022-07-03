@@ -70,21 +70,42 @@ function toggle_application(_appBundleId)
 	local mainwin = app:mainWindow()
 	-- confirm app name, usually application name is in left-top corner besides apple icon.
 	-- alert.show("pid:"..tostring(app:pid()).."-bundleId:"..tostring(app:bundleID()).."-name:"..app:name())
-	print("mainWindow is null?" .. tostring(mainwin == nil))
 	if mainwin then
 		local isAppFront = app:isFrontmost()
-		print("isAppFront:" .. tostring(isAppFront))
 		if true == isAppFront then
-			app:hide()
+			toggle_window(app, mainwin)
 		else
 			app:unhide()
 			app:activate(true)
 			mainwin:focus()
 		end
 	else
+		print("toggle_application mainwind null")
 		-- ctrl-w close app
-		print("mainWindow is Null -> launch:" .. tostring(application.launchOrFocusByBundleID(_appBundleId)))
-		print("mainWindow is Null -> unhide:" .. tostring(app:unhide()))
-		print("mainWindow is Null -> activate:" .. tostring(app:activate(true)))
+		application.launchOrFocusByBundleID(_appBundleId)
+		app:unhide()
+		app:activate(true)
+	end
+end
+
+function toggle_window(app, mainwin)
+	local allWindows = app:allWindows()
+	print("toggle_window mainWindow:" .. mainwin:title())
+	if allWindows and #allWindows > 1 then
+		local focusIndex = 1
+		for index, value in ipairs(allWindows) do
+			print("toggle_window index:" .. index)
+			print("toggle_window title:" .. value:title())
+			if mainwin:id() == value:id() then
+				focusIndex = index
+				break
+			end
+		end
+		-- table index start with 1
+		local nextFocusIndex = focusIndex % #allWindows + 1
+		print("toggle_window nextWindow:" .. allWindows[nextFocusIndex]:title())
+		allWindows[nextFocusIndex]:focus()
+	else
+		app:hide()
 	end
 end

@@ -72,7 +72,7 @@ function toggle_application(_appBundleId)
 	-- alert.show("pid:"..tostring(app:pid()).."-bundleId:"..tostring(app:bundleID()).."-name:"..app:name())
 	if mainwin then
 		local isAppFront = app:isFrontmost()
-		if true == isAppFront then
+		if isAppFront then
 			toggle_window(app, mainwin)
 		else
 			app:unhide()
@@ -88,24 +88,33 @@ function toggle_application(_appBundleId)
 	end
 end
 
+-- switcher table
+-- key: app:name()
+-- value: switcher
+local switcherTable = {}
+
 function toggle_window(app, mainwin)
 	local allWindows = app:allWindows()
 	print("toggle_window mainWindow:" .. mainwin:title())
-	if allWindows and #allWindows > 1 then
-		local focusIndex = 1
-		for index, value in ipairs(allWindows) do
-			print("toggle_window index:" .. index)
-			print("toggle_window title:" .. value:title())
-			if mainwin:id() == value:id() then
-				focusIndex = index
-				break
-			end
+	print("toggle_window size:" .. tostring(#allWindows))
+	print("toggle_window appName:" .. app:name())
+	if #allWindows > 1 and doNotUseSwitcher(app) then
+		local appSwitcher = switcherTable[app:name()]
+		if appSwitcher then
+			print("toggle_window appSwitcher exist")
+			appSwitcher:next()
+		else
+			print("toggle_window create appSwitcher")
+			local windowSwitcher = hs.window.switcher.new(hs.window.filter.new({ app:name() }))
+			switcherTable[app:name()] = windowSwitcher
+			windowSwitcher:next()
 		end
-		-- table index start with 1
-		local nextFocusIndex = focusIndex % #allWindows + 1
-		print("toggle_window nextWindow:" .. allWindows[nextFocusIndex]:title())
-		allWindows[nextFocusIndex]:focus()
 	else
 		app:hide()
 	end
+end
+
+function doNotUseSwitcher(app)
+	local bundleId = app:bundleID()
+	return bundleId ~= key2App["b"]
 end

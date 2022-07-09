@@ -72,6 +72,7 @@ function toggle_application(_appBundleId)
 	-- alert.show("pid:"..tostring(app:pid()).."-bundleId:"..tostring(app:bundleID()).."-name:"..app:name())
 	if mainwin then
 		local isAppFront = app:isFrontmost()
+		print("toggle_application isAppFront:" .. tostring(isAppFront))
 		if isAppFront then
 			toggle_window(app, mainwin)
 		else
@@ -92,29 +93,66 @@ end
 -- key: app:name()
 -- value: switcher
 local switcherTable = {}
+local filterTable = {}
+
+function getAppWindowFilter(appName)
+	local appFilter = filterTable[appName]
+	if appFilter then
+		print("window filter exist")
+	else
+		print("create filter:" .. appName)
+		appFilter = hs.window.filter.new(appName):setAppFilter(appName, {
+			visible = true,
+			currentSpace = nil,
+		})
+		filterTable[appName] = appFilter
+	end
+	return appFilter
+end
+
+function getAppSwitcherInstance(appName)
+	local appSwitcher = switcherTable[appName]
+	if appSwitcher then
+		print("appSwitcher exist")
+	else
+		print("create appSwitcher")
+		local windowSwitcher = hs.window.switcher.new(getAppWindowFilter(appName))
+		switcherTable[appName] = windowSwitcher
+		appSwitcher = windowSwitcher
+	end
+	return appSwitcher
+end
 
 function toggle_window(app, mainwin)
 	local allWindows = app:allWindows()
+	for index, value in ipairs(allWindows) do
+		print("allWindow index:" .. tostring(index))
+		if value then
+			print("allWindow window:" .. tostring(value:title()))
+		end
+	end
+
+	local appFilter = getAppWindowFilter(app:name())
+	local appFilterWindows = appFilter:getWindows()
+	for index, value in ipairs(appFilterWindows) do
+		print("appWindowFilter index:" .. tostring(index))
+		if value then
+			print("appWindowFilter window:" .. tostring(value:title()))
+		end
+	end
+
+	local windowSpaces = hs.spaces.windowSpaces(mainwin:id())
+	for index in ipairs(windowSpaces) do
+		print("space index:" .. tostring(index))
+	end
+
 	print("toggle_window mainWindow:" .. mainwin:title())
 	print("toggle_window size:" .. tostring(#allWindows))
 	print("toggle_window appName:" .. app:name())
-	if #allWindows > 1 and doNotUseSwitcher(app) then
-		local appSwitcher = switcherTable[app:name()]
-		if appSwitcher then
-			print("toggle_window appSwitcher exist")
-			appSwitcher:next()
-		else
-			print("toggle_window create appSwitcher")
-			local windowSwitcher = hs.window.switcher.new(hs.window.filter.new({ app:name() }))
-			switcherTable[app:name()] = windowSwitcher
-			windowSwitcher:next()
-		end
+	if #allWindows > 1 then
+		local appSwitcher = getAppSwitcherInstance(app:name())
+		appSwitcher:next()
 	else
 		app:hide()
 	end
-end
-
-function doNotUseSwitcher(app)
-	local bundleId = app:bundleID()
-	return bundleId ~= key2App["b"]
 end

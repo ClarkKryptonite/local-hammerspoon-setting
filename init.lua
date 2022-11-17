@@ -16,27 +16,29 @@
 require("toggle-application")
 -- require("windows")
 require("input-method")
+-- require("caffeinate")
 
 -- -----------------------------------------------------------------------
 --                            ** For Debug **                           --
 -- -----------------------------------------------------------------------
-function reloadConfig(paths, flagTables)
-	local doReload = false
-	for _, path in pairs(paths) do
-		print("reloadConfig path:" .. path)
-		if string.find(path, ".lua") then
-			print("has lua file")
-			doReload = true
-			break
-		end
-	end
-	if doReload then
-		hs.reload()
-	end
+local function reloadConfig(paths)
+    local doReload = false
+    for _, path in pairs(paths) do
+        print("reloadConfig path:" .. path)
+        if string.find(path, ".lua") then
+            print("has lua file")
+            doReload = true
+            break
+        end
+    end
+    if doReload then
+        hs.reload()
+    end
 end
+
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 
-hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "n", function()
-	hs.reload()
+hs.hotkey.bind({ "cmd", "alt", "ctrl" }, "h", function()
+    hs.reload()
 end)
 hs.alert.show("Config loaded")

@@ -17,7 +17,7 @@ end)
 
 function applicationWatcher(appName, eventType, appObject)
 	if eventType == hs.application.watcher.activated or eventType == hs.application.watcher.launched then
-		hs.keycodes.currentSourceID("im.rime.inputmethod.Squirrel.Rime")
+		hs.keycodes.currentSourceID("im.rime.inputmethod.Squirrel.Rime.Hans")
 	end
 end
 
